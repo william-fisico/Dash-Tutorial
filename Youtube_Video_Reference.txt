@@ -1,0 +1,3 @@
+Youtube Video
+Django Plotly Dash Tutorial How to Connect Dashboards & Graphs into a Python Full Stack Application
+https://youtu.be/psvU4zwO3Ao?t=1740
