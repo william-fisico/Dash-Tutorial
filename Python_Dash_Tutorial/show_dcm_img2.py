@@ -19,43 +19,37 @@ y_res = (ds[0x3002,0x0011].value[1])*(sad/sid)
 dx = 0
 dy = 0
 
-x_axis = [(x*x_res/10)-dx for x in range(np.shape(image_array)[0])]
-y_axis = [(y*y_res/10)-dy for y in range(np.shape(image_array)[1])]
 
 
 
-fig = px.imshow(image_array, x=x_axis, y=y_axis, origin='lower')
-fig.update_layout(coloraxis_showscale=False)
+fig = go.Figure()
 
-# Add traces, one for each slider step
-for step in np.arange(0, 24, 1):
-    #vis = True if step == 1 else False
-    cor = "black" if step == 1 else "red"
-    x_line_value = [step for i in x_axis]
-    fig.add_trace(go.Scatter(
-                            visible=False,
-                            line=dict(color=cor, width=1, dash="dash"),
-                            x=x_line_value,
-                            y=x_axis))
-    #fig.add_vline(x=(step-12), line_width=1, line_dash="dash", line_color="green", visible=False)
-    ##fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="green", visible=False)
+for step in np.arange(0, 23, 1):
+    x_axis = [(x*x_res/10)-12.5 for x in range(np.shape(image_array)[0])]
+    y_axis = [(y*y_res/10)-step for y in range(np.shape(image_array)[1])]
+    y_line_value = [0 for i in y_axis]
+    fig.add_trace(
+            go.Heatmap(z=image_array, x=x_axis, y=y_axis, visible=False)
+        )
+    fig.add_trace(
+            go.Scatter(visible=False, line=dict(color="green", width=1, dash="dash"),
+                        y=y_line_value, x=x_axis)
+        )
 
-#Horizontal and Vertical Lines and Rectangles in Python
-#https://plotly.com/python/horizontal-vertical-shapes/
-#fig.add_vline(x=0, line_width=1, line_dash="dash", line_color="green")
-#fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="green")
+fig.update_layout(width=700, height=700, autosize=True)
 
-fig.data[10].visible = True
+fig.data[0].visible = True
+fig.data[1].visible = True
 
-# Create and add slider
 steps = []
-for i in range(1,len(fig.data)):
+for i in range(0,len(fig.data),2):
     step = dict(
         method="update",
         args=[{"visible": [False] * len(fig.data)},
               {"title": "Slider switched to step: " + str(i)}],  # layout attribute
     )
     step["args"][0]["visible"][i] = True  # Toggle i'th trace to "visible"
+    step["args"][0]["visible"][i+1] = True  # Toggle i'th trace to "visible"
     steps.append(step)
 
 sliders = [dict(

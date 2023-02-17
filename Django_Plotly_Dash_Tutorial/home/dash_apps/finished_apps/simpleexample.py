@@ -31,9 +31,14 @@ y_axis = [(y*y_res/10)-dy for y in range(np.shape(image_array)[1])]
 fig = px.imshow(image_array, x=x_axis, y=y_axis, origin='lower')
 fig.update_layout(coloraxis_showscale=False)
 
+# Add traces, one for each slider step
+for step in np.arange(0, 24, 0.1):
+    fig.add_vline(x=(step-12), line_width=1, line_dash="dash", line_color="green", visible=True)
+    ##fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="green", visible=False)
+
 #Horizontal and Vertical Lines and Rectangles in Python
 #https://plotly.com/python/horizontal-vertical-shapes/
-fig.add_vline(x=0, line_width=1, line_dash="dash", line_color="green")
+#fig.add_vline(x=0, line_width=1, line_dash="dash", line_color="green")
 fig.add_hline(y=0, line_width=1, line_dash="dash", line_color="green")
 
 
